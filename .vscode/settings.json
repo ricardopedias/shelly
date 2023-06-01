@@ -1,0 +1,32 @@
+{
+    "breadcrumbs.enabled": false,
+    "editor.cursorStyle": "block",
+    "editor.cursorBlinking": "smooth",
+    "editor.fontFamily": "'Fira Code'",
+    "editor.fontLigatures": true,
+    "editor.fontSize": 13,
+    "editor.lineHeight": 30,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "editor.rulers": [
+        {
+        "column": 80,
+        "color": "#eeeeee11"
+        },
+        {
+            "column": 100,
+        "color": "#99ffe910"
+        },
+    ],
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/*/**": true
+    },
+    "workbench.activityBar.visible": false,
+    "workbench.sideBar.location": "right",
+    "workbench.colorTheme": "One Dark Pro",
+    "workbench.iconTheme": "quill-icons",
+    "window.zoomLevel": 2,
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
+}
