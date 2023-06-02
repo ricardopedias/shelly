@@ -1,12 +1,14 @@
+
 testStackAdd()
 {
     TEST_STACK_FILE="$(_testStackFile)"
-    echo -e $@ >> $TEST_STACK_FILE
+
+    echo -e $@ >> "$TEST_STACK_FILE"
 }
 
 _testStackFile()
 {
-    echo "/tmp/shtest_last.log"
+    echo "/tmp/shtest_stack.log"
 }
 
 testStackStart()
@@ -25,6 +27,8 @@ testStackStart()
 
 runTest()
 {
+    startFile $(_testStackFile)
+    
     # primeiro parâmetro é --test
     # a partir do segundo parâmetro é o nome do teste
     fileName=$(echo "$@.test.sh" | cut -d" " -f2) 

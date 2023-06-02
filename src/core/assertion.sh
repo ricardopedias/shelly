@@ -1,6 +1,48 @@
 
-ASSERTION_FAILS=0
-ASSERTION_OK=0
+assertionFails()
+{
+    count=$(cat $(_assertionFailsFile))
+
+    if [[ "$count" == "" ]]; then
+        count=0
+    fi
+
+    echo $count
+}
+
+assertionOk()
+{
+    count=$(cat $(_assertionOkFile))
+
+    if [[ "$count" == "" ]]; then
+        count=0
+    fi
+
+    echo $count
+}
+
+_assertionFailsFile()
+{
+    echo "/tmp/shtest_fails.log"
+}
+
+_assertionOkFile()
+{
+    echo "/tmp/shtest_ok.log"
+}
+
+startFile $(_assertionFailsFile)
+startFile $(_assertionOkFile)
+
+assertionIncrementFails()
+{
+    incrementFile "$(_assertionFailsFile)"
+}
+
+assertionIncrementOk()
+{
+    incrementFile "$(_assertionOkFile)"
+}
 
 _assertionGetActual()
 {
@@ -30,16 +72,6 @@ _assertionGetExpected()
     echo -e $(trim "$expected")
 }
 
-assertionFails()
-{
-    echo $ASSERTION_FAILS
-}
-
-assertionOk()
-{
-    echo $ASSERTION_OK
-}
-
 assertEquals()
 {
     expected=$(_assertionGetExpected "$@")
@@ -47,14 +79,34 @@ assertEquals()
 
     message="Assert Equals"
 
-    if [[ "$expected" != "$actual" ]]; then
-        message=$(showCheckbox no $message)
-        message+="  : fails to check if \"$expected\" is equal to \"$actual\""
-        ASSERTION_FAILS=$(expr $ASSERTION_FAILS + 1)
-    else 
+    if [[ "$expected" == "$actual" ]]; then
         message=$(showCheckbox yes $message)
         message+=": \"$expected\" is equal to \"$actual\""
-        ASSERTION_OK=$(expr $ASSERTION_OK + 1)
+        assertionIncrementOk
+    else
+        message=$(showCheckbox no $message)
+        message+="  : \"$expected\" is not equal to \"$actual\""
+        assertionIncrementFails
+    fi
+
+    testStackAdd "$message"
+}
+
+assertContains()
+{
+    expected=$(_assertionGetExpected "$@")
+    contains=$(_assertionGetActual "$@")
+
+    message="Assert Contains"
+
+    if [[ "$expected" =~ .*"$contains".* ]]; then
+        message=$(showCheckbox yes $message)
+        message+=": \"$expected\" contains \"$actual\""
+        assertionIncrementOk
+    else 
+        message=$(showCheckbox no $message)
+        message+="  : \"$expected\" does not contain \"$actual\""
+        assertionIncrementFails
     fi
 
     testStackAdd "$message"

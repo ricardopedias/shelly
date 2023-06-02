@@ -1,6 +1,7 @@
 
 source "$ROOT_PATH/src/core/path.sh"
 
+source "$(pathSrc)/core/general.sh"
 source "$(pathSrc)/core/format.sh"
 source "$(pathSrc)/core/color.sh"
 source "$(pathSrc)/core/show.sh"
