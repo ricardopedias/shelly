@@ -9,7 +9,51 @@
 # script/setup.sh -h
 # 
 
-SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+EXIT_WITH_ERROR=1
+EXIT_WITH_SUCCESS=0
+
+ROOT_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+
+source "$ROOT_PATH/src/init.sh"
+
+if [[ "$1" == "--test" ]] && [[ "$2" != "" ]]; then
+    runSingleTest "$@"
+    exit $EXIT_WITH_SUCCESS
+fi
+
+if [[ "$1" == "--test" ]]; then
+    runAllTests
+    exit $EXIT_WITH_SUCCESS
+fi
+
+exit $EXIT_WITH_SUCCESS
+
+
+if [[ "$1" == "--test" ]]; then
+    source "$SRC_DIR/test.sh"
+    runTests $(ls test)
+    # test_list=$(ls test)
+
+    # for test_file in "$test_list"
+    # do
+    #     echo $test_file
+    #     source "$script_dir/test/$test_file"
+    # done
+
+    exit $EXIT_WITH_SUCCESS
+fi
+
+toolset=(
+    c++
+    php
+    javascript
+)
+
+toolset=(
+    c++
+    php
+    javascript
+)
 
 source "$SCRIPT_DIR/include/functions.sh"
 
@@ -29,8 +73,6 @@ if [[ "$@" == "" ]]; then
     showHelp
 fi
 
-EXIT_WITH_ERROR=1
-EXIT_WITH_SUCCESS=0
 
 PARAM_LIST=$(parseArgumentPairs $@)
 
