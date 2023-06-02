@@ -1,113 +1,95 @@
-TEST_CASE=""
-TEST_NUMBER=0
-RESULT_FAIL="no"
-
-RESULT_STACK="$(startBlue)\n"
-RESULT_STACK="${RESULT_STACK}$(showLineFull)\n"
-RESULT_STACK="${RESULT_STACK}Running unit tests\n"
-RESULT_STACK="${RESULT_STACK}$(showLineFull)\n"
-RESULT_STACK="${RESULT_STACK}$(endBlue)"
-
-trim() {
-    text="$@"
-    echo $(echo $text | sed 's/ *$//g')
-}
-
-_assertionGetActual()
+testStackAdd()
 {
-    ARGS="$@"
-    firstChar=${ARGS:0:1}
-
-    if [[ "$firstChar" == ":" ]]; then
-        actual=$(echo "$@" | cut -d":" -f3)
-    else
-        actual=$(echo "$@" | cut -d":" -f2)
-    fi
-
-    echo -e $(trim "$actual")
+    TEST_STACK_FILE="$(_testStackFile)"
+    echo -e $@ >> $TEST_STACK_FILE
 }
 
-_assertionGetExpected()
+_testStackFile()
 {
-    ARGS="$@"
-    firstChar=${ARGS:0:1}
-
-    if [[ "$firstChar" == ":" ]]; then
-        expected=$(echo "$@" | cut -d":" -f2)
-    else
-        expected=$(echo "$@" | cut -d":" -f1)
-    fi
-
-    echo -e $(trim "$expected")
+    echo "/tmp/shtest_last.log"
 }
 
-assertEquals() {
-    expected=$(_assertionGetExpected "$@")
-    actual=$(_assertionGetActual "$@")
+testStackStart()
+{
+    TEST_STACK_FILE="$(_testStackFile)"
 
-    message="Assert Equals"
+    # limpa o arquivo de log
+    cat /dev/null > $TEST_STACK_FILE
 
-    if [[ "$expected" != "$actual" ]]; then
-        message=$(showCheckbox no $message)
-        message="${message}  : fails to check if \"$expected\" is equal to \"$actual\""
-        RESULT_FAIL="yes"
-    else 
-        message=$(showCheckbox yes $message)
-        message="${message}: \"$expected\" is equal to \"$actual\""
-    fi
-
-    RESULT_STACK="$RESULT_STACK\n$message"
+    testStackAdd "$(startBlue)"
+    testStackAdd "$(showLineFull)"
+    testStackAdd "Running unit tests"
+    testStackAdd "$(showLineFull)"
+    testStackAdd "$(endBlue)"
 }
 
-runAllTests() {
-    testDir="$(pathTest)"
+runTest()
+{
+    # primeiro parâmetro é --test
+    # a partir do segundo parâmetro é o nome do teste
+    fileName=$(echo "$@.test.sh" | cut -d" " -f2) 
 
-    allTests=$(ls $testDir)
+    testStackStart
 
+    testStackAdd "Test: $fileName\n$(showLineFull)"
+
+    _runSingleTest $fileName
+
+    testStackAdd "Ok: $(assertionOk), Fails: $(assertionFails)\n"
+
+    cat $(_testStackFile)
+
+    if [[ $(assertionFails) > 0 ]]; then
+        exit $EXIT_WITH_ERROR
+        return
+    fi
+
+    exit $EXIT_WITH_SUCCESS
+}
+
+runAllTests()
+{
+    testStackStart
+
+    allTests=$(ls $(pathTest))
+
+    index=1
     for file in $allTests
     do
-        RESULT_STACK="$RESULT_STACK\n$file\n$(showLineFull)"
-        source "$testDir/$file"
-        RESULT_STACK="$RESULT_STACK\n"
+        testStackAdd "Test $index: $file\n$(showLineFull)"
+        _runSingleTest "$file"
+
+        index=$(expr $index + 1)
     done
 
-    echo -e "$RESULT_STACK\n"
+    testStackAdd "Ok: $(assertionOk), Fails: $(assertionFails)\n"
 
-    if [[ "$RESULT_FAIL" == "yes" ]]; then
+    cat $(_testStackFile)
+
+   if [[ $(assertionFails) > 0 ]]; then
         exit $EXIT_WITH_ERROR
-    else 
-        exit $EXIT_WITH_SUCCESS
+        return
     fi
+
+    exit $EXIT_WITH_SUCCESS
 }
 
-runSingleTest() {
-    fileName=$(echo "$@" | cut -d" " -f2) # a partir do segundo parâmetro
-
-    file="$(pathTest)/$fileName.test.sh"
-
-    TEST_CASE="$file"
+_runSingleTest()
+{
+    file="$(pathTest)/$@"
 
     if [[ ! -f $file ]]; then
-        inRed $(showLineFull)
-        showError File \"$fileName.test.sh\" does not exists
-        inRed $(showLineFull)
+        testStackAdd $(
+            inRed $(showLineFull)
+            showError File \"$fileName\" does not exists
+            inRed $(showLineFull)
+        )
         
         exit $EXIT_WITH_ERROR
     fi
 
-    RESULT_STACK="$RESULT_STACK\n$fileName.test.sh\n$(showLineFull)"
+    $(source "$file")
 
-    source "$file"
+    testStackAdd "\n"
     
-    echo -e $RESULT_STACK
-
-    startBlue
-    showLineFull 
-    endBlue
-
-    if [[ "$RESULT_FAIL" == "yes" ]]; then
-        exit $EXIT_WITH_ERROR
-    else 
-        exit $EXIT_WITH_SUCCESS
-    fi
 }

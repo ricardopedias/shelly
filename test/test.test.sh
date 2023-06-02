@@ -1,11 +1,9 @@
 
-assertEquals \
-    $(echo "ricardo") \
-    : "ricardo"
+XABLAU=xuuuooo
+
+assertEquals $(echo "ricardo") : "ricardo"
     
-assertEquals \
-    : $(echo "ricardo") \
-    : "pereira"
+assertEquals : $(echo "ricardo") : "pereira"
 
 
 

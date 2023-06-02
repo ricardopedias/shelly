@@ -9,17 +9,7 @@ assertEquals \
     : $(echo "ricardo") \
     : "pereira"
 
-assertEquals \
-    : $(echo "ricardo") \
-    : "pereira"
 
-    assertEquals \
-    : $(echo "ricardo") \
-    : "pereira"
-
-    assertEquals \
-    : $(echo "ricardo") \
-    : "pereira"
 
 # assert_equals() "ricardo" "ricardo"
 # assert_equals() ricardo ricardo

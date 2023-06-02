@@ -5,7 +5,7 @@
 #  --param=value ou --param value : param=value
 #  -p=value ou -p value           : p=value
 #  -p ou --param                  : p=true
-parseArgumentPairs()
+prepareArgumentPairs()
 {
     ARGS=$@
 

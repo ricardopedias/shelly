@@ -17,31 +17,14 @@ ROOT_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 source "$ROOT_PATH/src/init.sh"
 
 if [[ "$1" == "--test" ]] && [[ "$2" != "" ]]; then
-    runSingleTest "$@"
-    exit $EXIT_WITH_SUCCESS
+    runTest "$@"
 fi
 
 if [[ "$1" == "--test" ]]; then
     runAllTests
-    exit $EXIT_WITH_SUCCESS
 fi
 
 exit $EXIT_WITH_SUCCESS
-
-
-if [[ "$1" == "--test" ]]; then
-    source "$SRC_DIR/test.sh"
-    runTests $(ls test)
-    # test_list=$(ls test)
-
-    # for test_file in "$test_list"
-    # do
-    #     echo $test_file
-    #     source "$script_dir/test/$test_file"
-    # done
-
-    exit $EXIT_WITH_SUCCESS
-fi
 
 toolset=(
     c++

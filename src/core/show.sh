@@ -1,52 +1,4 @@
 
-startBlue() {
-    echo -e "\e[0;34m"
-}
-
-endBlue() { 
-    echo -e "\e[0m"
-}
-
-inBlue() {
-    echo -e "\e[0;34m$@\e[0m"
-}
-
-startGreen() {
-    echo -e "\e[0;32m"
-}
-
-endGreen() { 
-    echo -e "\e[0m"
-}
-
-inGreen() {
-    echo -e "\e[0;32m$@\e[0m"
-}
-
-startRed() {
-    echo -e "\e[0;31m"
-}
-
-endRed() { 
-    echo -e "\e[0m"
-}
-
-inRed() {
-    echo -e "\e[0;31m$@\e[0m"
-}
-
-startYellow() {
-    echo -e "\e[1;33m"
-}
-
-endYellow() { 
-    echo -e "\e[0m"
-}
-
-inYellow() {
-    echo -e "\e[1;33m$@\e[0m"
-}
-
 showText() {
     case $1 in 
         "error") ICON="✖" ;;
@@ -59,7 +11,7 @@ showText() {
     esac
 
     # o conteúdo a partir da 3 opção deve ser considerado um texto
-    MESSAGE=$(echo "$@" | cut -d" " -f3-99)
+    MESSAGE=$(echo "$@" | cut -d" " -f2-99)
 
     echo -e "$ICON $MESSAGE"
 }
@@ -124,7 +76,7 @@ showLineText() {
     for i in $(seq 2 $lineLength)
     do 
         if [[ $countChars -lt $i ]]; then
-            message="$message "
+            message+=" "
         fi
     done
 
