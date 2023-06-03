@@ -25,25 +25,33 @@ testStackStart()
     testStackAdd "$(endBlue)"
 }
 
+testPrint()
+{
+    testStackAdd $@
+}
+
 runTest()
 {
-    startFile $(_testStackFile)
-    
-    # primeiro parâmetro é --test
-    # a partir do segundo parâmetro é o nome do teste
-    fileName=$(echo "$@.test.sh" | cut -d" " -f2) 
-
     testStackStart
 
-    testStackAdd "Test: $fileName\n$(showLineFull)"
+    search="$2"
+    allTests=$(find $(pathTest) -maxdepth 5 -type f -name "*$search*")
 
-    _runSingleTest $fileName
+    index=1
+    for file in $allTests
+    do
+        basename="$(basename -- $file)"
+        testStackAdd "Test $index: $basename\n$(showLineFull)"
+        _runSingleTest "$file"
+
+        index=$(expr $index + 1)
+    done
 
     testStackAdd "Ok: $(assertionOk), Fails: $(assertionFails)\n"
 
     cat $(_testStackFile)
 
-    if [[ $(assertionFails) > 0 ]]; then
+   if [[ $(assertionFails) > 0 ]]; then
         exit $EXIT_WITH_ERROR
         return
     fi
@@ -55,12 +63,13 @@ runAllTests()
 {
     testStackStart
 
-    allTests=$(ls $(pathTest))
+    allTests=$(find $(pathTest) -maxdepth 5 -type f)
 
     index=1
     for file in $allTests
     do
-        testStackAdd "Test $index: $file\n$(showLineFull)"
+        basename="$(basename -- $file)"
+        testStackAdd "Test $index: $basename\n$(showLineFull)"
         _runSingleTest "$file"
 
         index=$(expr $index + 1)
@@ -80,7 +89,7 @@ runAllTests()
 
 _runSingleTest()
 {
-    file="$(pathTest)/$@"
+    file="$@"
 
     if [[ ! -f $file ]]; then
         testStackAdd $(
@@ -95,5 +104,4 @@ _runSingleTest()
     $(source "$file")
 
     testStackAdd "\n"
-    
 }

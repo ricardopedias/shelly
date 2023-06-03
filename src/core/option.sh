@@ -4,20 +4,37 @@
 # As opções são padronizadas da seguinte forma:
 #  --param=value ou --param value : param=value
 #  -p=value ou -p value           : p=value
-#  -p ou --param                  : p=true
+#  -p ou --param                  : p=1 ou 
 prepareArgumentPairs()
 {
-    ARGS=$@
+    arguments=$@
 
     # remove os espaços, para juntar todas as opções
-    ARGS=${ARGS//" "/"="}
+    arguments=${arguments//" "/"="}
 
     # adiciona espaços apenas antes dos sinalizadores -- e -
-    ARGS=${ARGS//"=--"/" --"}
-    ARGS=${ARGS//"=-"/" -"}
+    arguments=${arguments//"=--"/" --"}
+    arguments=${arguments//"=-"/" -"}
+
+    parsedArguments=""
+
+    for node in $arguments
+    do
+        key=$(echo "$node" | cut -d"=" -f1)
+        key=$(removeStartDashes $key)
+
+        value=$(echo "$node" | cut -d"=" -f2)
+        value=$(removeStartDashes $value)
+
+        if [[ "$key" == "$value" ]]; then
+            parsedArguments+="$key=1 "
+        else 
+            parsedArguments+="$key=$value "
+        fi
+    done
 
     # libera uma lista com pares de opção=valor
-    echo $ARGS
+    echo $parsedArguments
 }
 
 # Extrai o nome do parâmetro de um par
