@@ -31,9 +31,6 @@ _assertionOkFile()
     echo "/tmp/shtest_ok.log"
 }
 
-startFile $(_assertionFailsFile)
-startFile $(_assertionOkFile)
-
 assertionIncrementFails()
 {
     incrementFile "$(_assertionFailsFile)"
@@ -71,6 +68,11 @@ _assertionGetExpected()
 
     echo -e $(trim "$expected")
 }
+
+# _assertionGetLastFunction()
+# {
+#     echo $(fc -ln -1)
+# }
 
 assertEquals()
 {
@@ -111,3 +113,8 @@ assertContains()
 
     testStackAdd "$message"
 }
+
+# Efeitos colaterais necessários
+# iniciam os arquivos de log
+startFile $(_assertionFailsFile)
+startFile $(_assertionOkFile)

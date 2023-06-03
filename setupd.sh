@@ -17,7 +17,7 @@ ROOT_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 source "$ROOT_PATH/src/init.sh"
 
 if [[ "$1" == "--test" ]] && [[ "$2" != "" ]]; then
-    runTest "$@"
+    runSearchTest "$@"
 fi
 
 if [[ "$1" == "--test" ]]; then
@@ -25,6 +25,11 @@ if [[ "$1" == "--test" ]]; then
 fi
 
 exit $EXIT_WITH_SUCCESS
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+
+
 
 toolset=(
     c++

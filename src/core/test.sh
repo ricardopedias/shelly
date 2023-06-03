@@ -30,7 +30,7 @@ testPrint()
     testStackAdd $@
 }
 
-runTest()
+runSearchTest()
 {
     testStackStart
 
