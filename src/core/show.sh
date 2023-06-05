@@ -1,46 +1,54 @@
 
-showText() {
+showText()
+{
     case $1 in 
-        "error") ICON="✖" ;;
-        "ok") ICON="✔" ;;
-        "dot") ICON="●" ;;
-        "hand") ICON="🖝" ;;
-        "arrow") ICON="►" ;;
-        "space") ICON=" " ;;
+        "error") ICON="✖ " ;;
+        "ok") ICON="✔ " ;;
+        "dot") ICON="● " ;;
+        "hand") ICON="🖝 " ;;
+        "arrow") ICON="► " ;;
+        "space") ICON="  " ;;
         *) ICON="" ;;
     esac
 
     # o conteúdo a partir da 3 opção deve ser considerado um texto
     MESSAGE=$(echo "$@" | cut -d" " -f2-99)
 
-    echo -e "$ICON $MESSAGE"
+    echo "${ICON}${MESSAGE}"
 }
 
-showError() {
-    inRed $(showText error $@)
+showError()
+{
+    echo $(inRed $(showText error $@))
 }
 
-showInfo() {
-    showText hand $@
+showInfo()
+{
+    inBlue $(showText hand $@)
 }
 
-showMuted() {
-    showText none $@
+showMuted()
+{
+    showText space $@
 }
 
-showSuccess() {
-    showText ok $@
+showSuccess()
+{
+    inGreen $(showText ok $@)
 }
 
-showWarning() {
-    showText dot $@
+showWarning()
+{
+    inYellow $(showText dot $@)
 }
 
-showItem() {
+showItem()
+{
     showText arrow $@
 }
 
-showCheckbox() {
+showCheckbox()
+{
     COLOR_BLUE='\e[0;34m'
     COLOR_GREEN='\e[1;32m'
     COLOR_RED='\e[1;31m'

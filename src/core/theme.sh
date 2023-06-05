@@ -1,0 +1,6 @@
+
+DSETUP_BLUE="\e[0;34m"
+DSETUP_NC="\e[0m"
+DSETUP_GREEN="\e[0;32m"
+DSETUP_RED="\e[0;31m"
+DSETUP_YELLOW="\e[1;33m"

@@ -1,11 +1,13 @@
 
-source "$ROOT_PATH/src/core/path.sh"
+SRC_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 
-source "$(pathSrc)/core/format.sh"
-source "$(pathSrc)/core/general.sh"
-source "$(pathSrc)/core/color.sh"
-source "$(pathSrc)/core/show.sh"
-source "$(pathSrc)/core/option.sh"
-source "$(pathSrc)/core/help.sh"
-source "$(pathSrc)/core/assertion.sh"
-source "$(pathSrc)/core/test.sh"
+source "$SRC_PATH/core/path.sh"
+source "$SRC_PATH/core/vendor.sh"
+source "$SRC_PATH/core/format.sh"
+source "$SRC_PATH/core/general.sh"
+source "$SRC_PATH/core/theme.sh"
+source "$SRC_PATH/core/color.sh"
+source "$SRC_PATH/core/show.sh"
+source "$SRC_PATH/core/option.sh"
+source "$SRC_PATH/core/help.sh"
+source "$SRC_PATH/core/test.sh"

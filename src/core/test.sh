@@ -1,33 +1,16 @@
 
-testStackAdd()
+shunitExecutable()
 {
-    TEST_STACK_FILE="$(_testStackFile)"
-
-    echo -e $@ >> "$TEST_STACK_FILE"
-}
-
-_testStackFile()
-{
-    echo "/tmp/shtest_stack.log"
+    echo "$(pathVendor)/shunit2/shunit2"
 }
 
 testStackStart()
 {
-    TEST_STACK_FILE="$(_testStackFile)"
-
-    # limpa o arquivo de log
-    cat /dev/null > $TEST_STACK_FILE
-
-    testStackAdd "$(startBlue)"
-    testStackAdd "$(showLineFull)"
-    testStackAdd "Running unit tests"
-    testStackAdd "$(showLineFull)"
-    testStackAdd "$(endBlue)"
-}
-
-testPrint()
-{
-    testStackAdd $@
+    echo -e "$(startBlue)"
+    echo -e "$(showLineFull)"
+    echo -e "Running unit tests"
+    echo -e "$(showLineFull)"
+    echo -e "$(endBlue)"
 }
 
 runSearchTest()
@@ -37,26 +20,10 @@ runSearchTest()
     search="$2"
     allTests=$(find $(pathTest) -maxdepth 5 -type f -name "*$search*")
 
-    index=1
     for file in $allTests
     do
-        basename="$(basename -- $file)"
-        testStackAdd "Test $index: $basename\n$(showLineFull)"
         _runSingleTest "$file"
-
-        index=$(expr $index + 1)
     done
-
-    testStackAdd "Ok: $(assertionOk), Fails: $(assertionFails)\n"
-
-    cat $(_testStackFile)
-
-   if [[ $(assertionFails) > 0 ]]; then
-        exit $EXIT_WITH_ERROR
-        return
-    fi
-
-    exit $EXIT_WITH_SUCCESS
 }
 
 runAllTests()
@@ -65,26 +32,10 @@ runAllTests()
 
     allTests=$(find $(pathTest) -maxdepth 5 -type f)
 
-    index=1
     for file in $allTests
     do
-        basename="$(basename -- $file)"
-        testStackAdd "Test $index: $basename\n$(showLineFull)"
         _runSingleTest "$file"
-
-        index=$(expr $index + 1)
     done
-
-    testStackAdd "Ok: $(assertionOk), Fails: $(assertionFails)\n"
-
-    cat $(_testStackFile)
-
-   if [[ $(assertionFails) > 0 ]]; then
-        exit $EXIT_WITH_ERROR
-        return
-    fi
-
-    exit $EXIT_WITH_SUCCESS
 }
 
 _runSingleTest()
@@ -92,16 +43,25 @@ _runSingleTest()
     file="$@"
 
     if [[ ! -f $file ]]; then
-        testStackAdd $(
-            inRed $(showLineFull)
-            showError File \"$fileName\" does not exists
-            inRed $(showLineFull)
-        )
+        inRed $(showLineFull)
+        showError File \"$file\" does not exists
+        inRed $(showLineFull)
         
         exit $EXIT_WITH_ERROR
     fi
 
-    $(source "$file")
+    basename="$(basename -- $file)"
+    echo -e "Test: $basename\n$(showLineFull)"
 
-    testStackAdd "\n"
+    # variável de ambiente com o caminho do script de inicialização
+    DSETUP_INIT="$(pathSrc)/init.sh"
+    export DSETUP_INIT
+
+    # variável de ambiente com o caminho da ferramenta de testes
+    DSETUP_SHUNIT="$(pathVendor)/shunit2/shunit2"
+    export DSETUP_SHUNIT
+
+    echo -e $(cd $(dirname $file); bash "$file")
+
+    echo -e "\n"
 }

@@ -1,48 +1,60 @@
 
-startBlue() {
-    echo -e "\e[0;34m"
+startBlue()
+{
+    echo -e "$DSETUP_BLUE"
 }
 
-endBlue() { 
-    echo -e "\e[0m"
+endBlue()
+{ 
+    echo -e "$DSETUP_NC"
 }
 
-inBlue() {
-    echo -e "\e[0;34m$@\e[0m"
+inBlue()
+{
+    echo -e "$(startBlue)$@$(endBlue)"
 }
 
-startGreen() {
-    echo -e "\e[0;32m"
+startGreen()
+{
+    echo -e "$DSETUP_GREEN"
 }
 
-endGreen() { 
-    echo -e "\e[0m"
+endGreen()
+{ 
+    echo -e "$DSETUP_NC"
 }
 
-inGreen() {
-    echo -e "\e[0;32m$@\e[0m"
+inGreen()
+{
+    echo -e "$(startGreen)$@$(endGreen)"
 }
 
-startRed() {
-    echo -e "\e[0;31m"
+startRed()
+{
+    echo -e "$DSETUP_RED"
 }
 
-endRed() { 
-    echo -e "\e[0m"
+endRed()
+{ 
+    echo -e "$DSETUP_NC"
 }
 
-inRed() {
-    echo -e "\e[0;31m$@\e[0m"
+inRed()
+{
+    echo -e "$(startRed)$@$(endRed)"
 }
 
-startYellow() {
-    echo -e "\e[1;33m"
+startYellow()
+{
+    echo -e "$DSETUP_YELLOW"
 }
 
-endYellow() { 
-    echo -e "\e[0m"
+endYellow()
+{ 
+    echo -e "$DSETUP_NC"
 }
 
-inYellow() {
-    echo -e "\e[1;33m$@\e[0m"
+inYellow()
+{
+    echo -e "$(startYellow)$@$(endYellow)"
 }
