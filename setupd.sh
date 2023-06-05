@@ -16,6 +16,17 @@ ROOT_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 
 source "$ROOT_PATH/src/init.sh"
 
+if [[ "$1" == "--install" ]]; then
+    doInstall
+    exit $EXIT_WITH_SUCCESS
+fi
+
+if [[ "$1" == "--update" ]]; then
+    rm -Rf $(pathVendor)
+    doInstall
+    exit $EXIT_WITH_SUCCESS
+fi
+
 if [[ "$1" == "--test" ]] && [[ "$2" != "" ]]; then
     runSearchTest "$@"
 fi
