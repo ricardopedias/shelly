@@ -2,4 +2,5 @@
 build/
 extern/*
 !extern/.gitkeep
+vendor/
 git
