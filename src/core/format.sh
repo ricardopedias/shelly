@@ -1,6 +1,17 @@
-trim() {
-    text="$@"
-    echo $(echo $text | sed 's/ *$//g')
+trim()
+{
+    # declara os caracteres de controle
+    lines=$(echo -e $@)
+
+    # remove as novas linhas
+    oneline=""
+    for line in $lines
+    do
+        oneline+=$line
+    done
+
+    # remove espaços antes e depois
+    echo $(echo $oneline | sed 's/ *$//g')
 }
 
 removeStartDashes()

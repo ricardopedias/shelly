@@ -20,13 +20,15 @@ prepareArgumentPairs()
 
     for node in $arguments
     do
-        key=$(echo "$node" | cut -d"=" -f1)
-        key=$(removeStartDashes $key)
+        originKey=$(echo "$node" | cut -d"=" -f1)
+        originValue=$(echo "$node" | cut -d"=" -f2)
 
-        value=$(echo "$node" | cut -d"=" -f2)
-        value=$(removeStartDashes $value)
+        key=$(removeStartDashes $originKey)
+        value=$(removeStartDashes $originValue)
 
-        if [[ "$key" == "$value" ]]; then
+        # se a chave (-- ou -) for igual ao valor, 
+        # significa que não foi passado um valor para ela
+        if [[ "$originKey" == "$originValue" ]]; then
             parsedArguments+="$key=1 "
         else 
             parsedArguments+="$key=$value "
@@ -40,10 +42,10 @@ prepareArgumentPairs()
 # Extrai o nome do parâmetro de um par
 pairKey()
 {
-    PAIR=${1//"="/" "}
-    for NODE in $PAIR
+    pair=${1//"="/" "}
+    for node in $pair
     do
-        echo ${NODE//"-"/""}
+        echo ${node//"-"/""}
         return
     done
 }
@@ -51,24 +53,19 @@ pairKey()
 # Extrai o valor de um par
 pairValue()
 {
-    KEY="none"
-    VALUE="none"
+    key="none"
+    value="none"
 
-    PAIR=${1//"="/" "}
+    pair=${1//"="/" "}
 
-    for NODE in $PAIR
+    for node in $pair
     do
-        if [[ "$KEY" == "none" ]]; then
-            KEY="$NODE"
+        if [[ "$key" == "none" ]]; then
+            key="$node"
         fi
 
-        VALUE="$NODE"
+        value="$node"
     done
 
-    if [[ "$KEY" == "$VALUE" ]]; then
-        echo "1"
-        return
-    fi
-
-    echo ${VALUE//"-"/""}
+    echo ${value//"-"/""}
 }
