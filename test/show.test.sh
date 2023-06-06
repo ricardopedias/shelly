@@ -23,7 +23,17 @@ testMessages()
 
 testCheckbox()
 {
-    assertEquals 2 2
+    assertEquals \
+        "$(echo -e Mensagem textual $(startGreen)[YES]$(endGreen))" \
+        "$(showCheckbox yes Mensagem textual)"
+
+    assertEquals \
+        "$(echo -e Mensagem textual $(startRed)[NO]$(endRed))" \
+        "$(showCheckbox no Mensagem textual)"
+    
+    assertEquals \
+        "$(echo -e Mensagem textual $(startBlue)[Yeah Man]$(endBlue))" \
+        "$(showCheckbox Yeah_Man Mensagem textual)"
 }
 
 source $DSETUP_INIT
