@@ -1,17 +1,6 @@
-
 startBlue()
 {
     echo -e "$DSETUP_BLUE"
-}
-
-endBlue()
-{ 
-    echo -e "$DSETUP_NC"
-}
-
-inBlue()
-{
-    echo -e "$(startBlue)$@$(endBlue)"
 }
 
 startGreen()
@@ -19,29 +8,9 @@ startGreen()
     echo -e "$DSETUP_GREEN"
 }
 
-endGreen()
-{ 
-    echo -e "$DSETUP_NC"
-}
-
-inGreen()
-{
-    echo -e "$(startGreen)$@$(endGreen)"
-}
-
 startRed()
 {
     echo -e "$DSETUP_RED"
-}
-
-endRed()
-{ 
-    echo -e "$DSETUP_NC"
-}
-
-inRed()
-{
-    echo -e "$(startRed)$@$(endRed)"
 }
 
 startYellow()
@@ -49,9 +18,44 @@ startYellow()
     echo -e "$DSETUP_YELLOW"
 }
 
+endColor()
+{
+    echo -e "$DSETUP_NC"    
+}
+
+endBlue()
+{ 
+    endColor
+}
+
+endGreen()
+{ 
+    endColor
+}
+
+endRed()
+{ 
+    endColor
+}
+
 endYellow()
 { 
-    echo -e "$DSETUP_NC"
+    endColor
+}
+
+inBlue()
+{
+    echo -e "$(startBlue)$@$(endBlue)"
+}
+
+inGreen()
+{
+    echo -e "$(startGreen)$@$(endGreen)"
+}
+
+inRed()
+{
+    echo -e "$(startRed)$@$(endRed)"
 }
 
 inYellow()
