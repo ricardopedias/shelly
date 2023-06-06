@@ -29,13 +29,14 @@ fi
 
 if [[ "$1" == "--test" ]] && [[ "$2" != "" ]]; then
     runSearchTest "$@"
+    exit $EXIT_WITH_SUCCESS
 fi
 
 if [[ "$1" == "--test" ]]; then
     runAllTests
+    exit $EXIT_WITH_SUCCESS
 fi
 
-exit $EXIT_WITH_SUCCESS
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 

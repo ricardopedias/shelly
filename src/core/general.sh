@@ -12,12 +12,13 @@ startFile()
 incrementFile()
 {
     file=$1
+    amount=$2
     current=$(cat $file)
 
     if [[ "$current" == "" ]]; then
-        current=1
+        current=0
     else
-        current=$(expr $current + 1)
+        current=$((current + amount))
     fi
 
     echo -e $current > $file

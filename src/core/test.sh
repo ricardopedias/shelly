@@ -7,9 +7,9 @@ shunitExecutable()
 testStackStart()
 {
     echo -e "$(startBlue)"
-    echo -e "$(showLineFull)"
+    echo -e "$(shapeLineFull)"
     echo -e "Running unit tests"
-    echo -e "$(showLineFull)"
+    echo -e "$(shapeLineFull)"
     echo -e "$(endBlue)"
 }
 
@@ -43,15 +43,15 @@ _runSingleTest()
     file="$@"
 
     if [[ ! -f $file ]]; then
-        inRed $(showLineFull)
+        inRed $(shapeLineFull)
         showError File \"$file\" does not exists
-        inRed $(showLineFull)
+        inRed $(shapeLineFull)
         
         exit $EXIT_WITH_ERROR
     fi
 
     basename="$(basename -- $file)"
-    echo -e "Test: $basename\n$(showLineFull)"
+    echo -e "Test: $basename\n$(shapeLineFull)"
 
     # variável de ambiente com o caminho do script de inicialização
     DSETUP_INIT="$(pathSrc)/init.sh"
