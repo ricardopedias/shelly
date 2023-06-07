@@ -62,7 +62,7 @@ shapeBlockAuto()
     message="$@"
     countChars="${#message}"
 
-    showBlock $countChars $message
+    shapeBlock $countChars $message
 }
 
 shapeBlockFull()
@@ -70,5 +70,5 @@ shapeBlockFull()
     message="$@"
     length=$(expr $(_shapeConsoleLength) - 6)
 
-    showBlock $length $message
+    shapeBlock $length $message
 }

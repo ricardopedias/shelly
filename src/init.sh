@@ -1,4 +1,7 @@
 
+EXIT_WITH_ERROR=1
+EXIT_WITH_SUCCESS=0
+
 SRC_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 
 source "$SRC_PATH/core/path.sh"

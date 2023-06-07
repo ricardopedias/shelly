@@ -1,18 +1,57 @@
 
-# 
-# PUBLIC
-#
 showHelp()
 {
-    showSection "Setup: Ajuda"
-    showSection
-    echo ""
-    _showHelpHeader $1
-    echo ""
-    _showHelpOptions
-    echo ""
-    showSection
-    exit 0
+    file=$1
+
+    while read -r row
+    do
+        _isHeader $row
+        if [[ "$(_isHeader $row)" == "yes" ]]
+        then
+            # shapeBlockFull $(removeStartHashes $row)
+            echo $row
+        fi
+
+        # echo "$row"
+    done < "$file"
+
+    
+    # showSection "Setup: Ajuda"
+    # showSection
+    # echo ""
+    # _showHelpHeader $1
+    # echo ""
+    # _showHelpOptions
+    # echo ""
+    # showSection
+    # exit 0
+}
+
+_isHeader()
+{
+    content=$(trim $@)
+    charOne=${content:0:1}
+    charTwo=${content:1:2}
+
+    if [[ "$charTwo" == "#" ]]; then
+        echo "no"
+    else 
+        echo "yes"
+    fi
+}
+
+_isSection()
+{
+    content=$@
+    charOne=${content:0:1}
+    charTwo=${content:1:2}
+
+    if [[ "$charOne" == "#" ]] && [[ "$charTwo" == "#" ]]
+    then
+        echo "yes"
+    else
+        echo "no"
+    fi
 }
 
 showHelpShort()

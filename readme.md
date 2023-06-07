@@ -1,8 +1,14 @@
 # Developer Setup
 
-Esta é uma ferramenta de setup, cujo objetivo é agilizar o processo de instalação 
-e configuração de estações de trabalho voltadas para desenvolvimento de software.
+Este é um framework simples para criação de scripts bash baseados em linha de comando.
 
+## Como usar
+
+
+
+## Testes
+
+Na 
 ```bash
 # para instruções de uso
 ./setupd.sh

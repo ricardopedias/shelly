@@ -1,31 +1,35 @@
 #!/bin/bash
 #
-# script.sh - Configuração de estações de trabalho para programação
+# setup.sh
 # 
-# Este programa é uma ferramenta para preparar um sistema operacional suportado,
+# Este programa é a porta de entrada para as funcionalidades do framework.
 # instalando dependências e fazendo as configurações necessárias para desenvolvimento
 # 
 # Para saber mais, execute:
-# script/setup.sh -h
+# setup.sh -h
 # 
-
-EXIT_WITH_ERROR=1
-EXIT_WITH_SUCCESS=0
 
 ROOT_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 
 source "$ROOT_PATH/src/init.sh"
 
+if [[ "$@" == "" ]] || [[ "$1" == "-h" ]]; then
+    showHelp $ROOT_PATH/src/help.md
+    exitSuccess
+fi
+
 if [[ "$1" == "--install" ]]; then
-    doInstall
-    exit $EXIT_WITH_SUCCESS
+    vendorInstall
+    exitSuccess
 fi
 
 if [[ "$1" == "--update" ]]; then
     rm -Rf $(pathVendor)
-    doInstall
-    exit $EXIT_WITH_SUCCESS
+    vendorInstall
+    exitSuccess
 fi
+
+checkVendorInstalation
 
 if [[ "$1" == "--test" ]] && [[ "$2" != "" ]]; then
     runSearchTest "$@"

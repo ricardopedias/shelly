@@ -23,3 +23,13 @@ incrementFile()
 
     echo -e $current > $file
 }
+
+exitError()
+{
+    exit $EXIT_WITH_ERROR
+}
+
+exitSuccess()
+{
+    exit $EXIT_WITH_SUCCESS
+}
