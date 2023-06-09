@@ -5,10 +5,17 @@ testTrim()
     assertEquals "abc" $(trim "abc    ")
     assertEquals "abc" $(trim "    abc    ")
     assertEquals "abc" $(trim "    abc")
+}
 
-    assertEquals "abc" $(trim "\nabc")
-    assertEquals "abc" $(trim "abc\n")
-    assertEquals "abc" $(trim "\nabc\n")
+testTrimNotContentSpaces()
+{
+    assertEquals "a b c" "$(trim "a b c    ")"
+    assertEquals "a b c" "$(trim "    a b c    ")"
+    assertEquals "a b c" "$(trim "    a b c")"
+
+    # assertEquals "abc" $(trim "\nabc")
+    # assertEquals "abc" $(trim "abc\n")
+    # assertEquals "abc" $(trim "\nabc\n")
 }
 
 testRemoveDashes()

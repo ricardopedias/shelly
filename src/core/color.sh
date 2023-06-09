@@ -18,9 +18,14 @@ startYellow()
     echo -e "$DSETUP_YELLOW"
 }
 
-endColor()
+startNonColor()
 {
     echo -e "$DSETUP_NC"    
+}
+
+endColor()
+{
+    startNonColor
 }
 
 endBlue()

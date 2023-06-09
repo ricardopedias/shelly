@@ -15,6 +15,12 @@ testStackStart()
 
 runSearchTest()
 {
+    if [[ "$(vendorIsInstalled)" == "no" ]]; then
+        showWarning "As dependências do projeto não foram instaladas"
+        showWarning "Por favor, execute --install"
+        exitError
+    fi
+
     testStackStart
 
     search="$2"
@@ -24,10 +30,18 @@ runSearchTest()
     do
         _runSingleTest "$file"
     done
+
+    exitSuccess
 }
 
 runAllTests()
 {
+    if [[ "$(vendorIsInstalled)" == "no" ]]; then
+        showWarning "As dependências do projeto não foram instaladas"
+        showWarning "Por favor, execute --install"
+        exitError
+    fi
+
     testStackStart
 
     allTests=$(find $(pathTest) -maxdepth 5 -type f)
@@ -36,6 +50,8 @@ runAllTests()
     do
         _runSingleTest "$file"
     done
+
+    exitSuccess
 }
 
 _runSingleTest()

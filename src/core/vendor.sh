@@ -1,19 +1,29 @@
 
-checkVendorInstalation()
+vendorIsInstalled()
 {
     if [[ -d "$(pathVendor)/" ]]; then
+        echo "yes"
         return
     fi
 
-    showWarning "As dependências do projeto não foram instaladas"
-    showWarning "Por favor, execute --install"
-
-    exit $EXIT_WITH_ERROR
+    echo "no"
 }
 
 vendorInstall()
 {
+    if [[ "$(vendorIsInstalled)" == "yes" ]]; then
+        showWarning "As bibliotecas externas já foram instaladas anteriormente";
+        showInfo "Para atualizá-las, use a opção --update"
+        return
+    fi
+
     git clone --branch v2.1.8 https://github.com/kward/shunit2.git $(pathVendor)/shunit2
 
-    exit $EXIT_WITH_SUCCESS
+    exitSuccess
+}
+
+vendorUpdate()
+{
+    rm -Rf $(pathVendor)
+    vendorInstall    
 }

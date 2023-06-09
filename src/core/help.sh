@@ -1,112 +1,90 @@
 
+# Exibe o arquivo .md fornecido de maneira formatada como ajuda
 showHelp()
 {
     file=$1
 
     while read -r row
     do
-        _isHeader $row
-        if [[ "$(_isHeader $row)" == "yes" ]]
-        then
-            # shapeBlockFull $(removeStartHashes $row)
-            echo $row
+        if [[ "$(_isHeader $row)" == "yes" ]]; then
+            startBlue 
+            shapeBlockFull "${row:1:99}"
+        elif [[ "$(_isSection $row)" == "yes" ]]; then
+            startBlue 
+            echo -e "${row:3:99}" 
+            endBlue
+        elif [[ "$row" != "" ]]; then
+            # _renderColumns "$row"
+            echo "$row"
         fi
 
-        # echo "$row"
     done < "$file"
 
-    
-    # showSection "Setup: Ajuda"
-    # showSection
-    # echo ""
-    # _showHelpHeader $1
-    # echo ""
-    # _showHelpOptions
-    # echo ""
-    # showSection
-    # exit 0
+    startBlue 
+    shapeLineFull
+    endBlue
+}
+
+renderCurrentHelp()
+{
+    if [[ ! -z "$DSETUP_HELP_FILE" ]]; then 
+        showHelp $DSETUP_HELP_FILE        
+        return
+    fi
+
+    showHelp "$(pathRoot)/src/help_main.md"
 }
 
 _isHeader()
 {
     content=$(trim $@)
     charOne=${content:0:1}
-    charTwo=${content:1:2}
+    charTwo=${content:1:1}
 
-    if [[ "$charTwo" == "#" ]]; then
-        echo "no"
-    else 
+    if [[ "$charOne" == "#" ]] && [[ "$charTwo" != "#" ]]; then
         echo "yes"
+        return
     fi
+
+    echo "no"
 }
 
 _isSection()
 {
-    content=$@
+    content=$(trim $@)
     charOne=${content:0:1}
-    charTwo=${content:1:2}
+    charTwo=${content:1:1}
 
-    if [[ "$charOne" == "#" ]] && [[ "$charTwo" == "#" ]]
-    then
+    if [[ "$charOne" == "#" ]] && [[ "$charTwo" == "#" ]]; then
         echo "yes"
-    else
-        echo "no"
-    fi
-}
-
-showHelpShort()
-{
-    showSection "Setup: Ajuda"
-    showSection
-    echo ""
-    showHelpHeader $1
-    echo ""
-    showSection
-    exit 0
-}
-
-showSupport()
-{
-    showText none none "Os sistemas suportados são:"
-    showText blue arrow "fedora 36, 37, 38"
-    showText blue arrow "ubuntu 22.10, 23.04, 23.04"
-    showText blue arrow "windows 10, 11"
-
-    showSection
-}
-
-# 
-# PRIVATE
-#
-
-_showHelpHeader()
-{
-    if [[ "$1" != "" ]]; then
-        showError $1
-        echo ""
+        return
     fi
 
-    showText blue none "Modo de uso: setup.sh <opções>"
-    echo ""
-    showText blue none "Exemplos:"
-    echo ""
-    showMuted "setup.sh -s fedora -r 39 -a"
-    showMuted "setup.sh --system=ubuntu --release=23.04 --all"
+    echo "no"
 }
 
-_showHelpOptions()
+_renderColumns()
 {
-    showText blue none "Opções:" none
-    echo ""
-    showMuted "-h|--help......Exibe_essa_ajuda"
-    showMuted "-s|--system....Tipo de sistema: Ex: fedora, ubuntu, windows, macos"
-    showMuted "-r|--release...Versão do sistema. Ex: 38, 23.04, etc"
-    showMuted "-a|--all.......Efetua todas as instalações e configurações"
-    showMuted "--cmake........Instala o cmake como builder"
-    showMuted "--xmake........Instala o xmake como builder"
-    showMuted "--git..........Instala e configura o Git"
-    showMuted "--chrome.......Instala o Google Chrome"
-    showMuted "--ssh..........Instala e configura o SSH e a chave para o GitHub"
-    showMuted "--vscode.......Instala e configura o Visual Studio Code"
-    showMuted "--zsh..........Instala e configura o Oh My Zsh"
+    content="$@"
+
+    if [[ "$content" != *":"* ]]; then
+        echo $content
+        return
+    fi
+
+    columnOne=$(echo $content | cut -d ":" -f 1)
+    columnTwo=$(echo $content | cut -d ":" -f 2)
+    
+    columnOneSize=${#columnOne}
+    
+    increase=$(expr 14 - $columnOneSize)
+
+    if [[ "$increase" > 0 ]]; then
+        for count in `seq $increase`
+        do
+            columnOne+=" "
+        done
+    fi
+
+    echo "$columnOne : $columnTwo"
 }
